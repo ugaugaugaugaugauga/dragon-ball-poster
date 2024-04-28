@@ -14,10 +14,42 @@ const pageObjArray = [
 const Home = () => {
   const [windowObj, setWindowObj] = useState<Window>()
   const [currentPageNum, setCurrentPageNum] = useState<number>(1)
-  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [isScrolling, setIsScrolling] = useState(false)
 
-  const totalNum = pageObjArray.length
   const pageRefs = useRef<HTMLDivElement[]>([])
+
+  useEffect(() => {
+    windowObj?.scrollTo({
+      top: 0,
+    })
+  }, [windowObj])
+
+  let lastScrollY = 0
+  var checkScrolling: any
+
+  const handleScroll = () => {
+    clearTimeout(checkScrolling)
+
+    const currentScrollY = window.scrollY
+
+    if (currentScrollY > lastScrollY || currentScrollY < lastScrollY) {
+      if (!isScrolling) setIsScrolling(true)
+    }
+
+    checkScrolling = setTimeout(() => {
+      if (isScrolling) setIsScrolling(false)
+    }, 66)
+
+    lastScrollY = currentScrollY
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -25,27 +57,9 @@ const Home = () => {
     }
   }, [])
 
-  const handlePageChange = (event: Event) => {
-    if (!windowObj || isTransitioning) return
-
-    let scroll = windowObj.scrollY
-    for (let i = 1; i <= totalNum; i++) {
-      if (
-        scroll > pageRefs.current[i].offsetTop - windowObj.outerHeight / 3 &&
-        scroll <
-          pageRefs.current[i].offsetTop -
-            windowObj.outerHeight / 3 +
-            pageRefs.current[i].offsetHeight
-      ) {
-        setCurrentPageNum(i)
-        break
-      }
-    }
-  }
-
   const handlePointClick = (pageNum: number) => {
-    if (!windowObj || isTransitioning) return
-
+    if (!windowObj) return
+    setCurrentPageNum(pageNum)
     windowObj.scrollTo({
       top: pageRefs.current[pageNum].offsetTop,
       behavior: 'smooth',
@@ -53,38 +67,40 @@ const Home = () => {
   }
 
   useEffect(() => {
-    if (!windowObj) return
-
-    windowObj.addEventListener('scroll', handlePageChange)
-    return () => {
-      windowObj.removeEventListener('scroll', handlePageChange)
-    }
-  }, [windowObj])
-
-  useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
-      if (!windowObj || !pageRefs.current || isTransitioning) return
+      if (!windowObj || !pageRefs.current) return
 
-      setIsTransitioning(true)
-      if (event.deltaY > 0 && currentPageNum + 1 < pageRefs.current.length) {
+      const maxPage = pageRefs.current.length - 1
+      const minPage = 1
+      const nextPage = Math.min(currentPageNum + 1, maxPage)
+      const prevPage = Math.max(currentPageNum - 1, minPage)
+
+      if (event.deltaY > 0) {
+        if (currentPageNum === nextPage) return
         windowObj.scrollTo({
-          top: pageRefs.current[currentPageNum + 1].offsetTop,
+          top: pageRefs.current[nextPage].offsetTop,
           behavior: 'smooth',
         })
-      } else if (event.deltaY < 0 && currentPageNum - 1 > 0) {
+        setCurrentPageNum(nextPage)
+        return
+      }
+      if (event.deltaY < 0) {
+        if (currentPageNum === prevPage) return
         windowObj.scrollTo({
           top: pageRefs.current[currentPageNum - 1].offsetTop,
           behavior: 'smooth',
         })
+        setCurrentPageNum(prevPage)
+        return
       }
-      setTimeout(() => setIsTransitioning(false), 500)
     }
 
     windowObj?.addEventListener('wheel', handleWheel)
     return () => {
       windowObj?.removeEventListener('wheel', handleWheel)
     }
-  }, [windowObj, currentPageNum, isTransitioning])
+  }, [windowObj, currentPageNum])
+
   return (
     <>
       <main className='relative '>
@@ -95,6 +111,7 @@ const Home = () => {
               pageNum={item.pageNum}
               bgColor={item.bgColor}
               pageRefs={pageRefs}
+              currentPageNum={currentPageNum}
             />
           )
         })}

@@ -4,9 +4,10 @@ interface Props {
   pageNum: number
   bgColor: string
   pageRefs: React.MutableRefObject<HTMLDivElement[]>
+  currentPageNum: number
 }
 
-const Section = ({ pageNum, bgColor, pageRefs }: Props) => {
+const Section = ({ pageNum, bgColor, pageRefs, currentPageNum }: Props) => {
   return (
     <div
       ref={(element) => {
@@ -14,16 +15,20 @@ const Section = ({ pageNum, bgColor, pageRefs }: Props) => {
       }}
       className={`w-full h-screen ${bgColor}`}
     >
-      <span>Page {pageNum}</span>
-      <motion.div
-        transition={{
-          delay: 0.3,
-          duration: 0.8,
-          ease: 'easeInOut',
-        }}
-        animate={{ x: 100, opacity: 1.0 }}
-        className='h-40 w-40 rounded-full bg-slate-500 opacity-0'
-      />
+      {currentPageNum === pageNum && (
+        <>
+          <span>Page {pageNum}</span>
+          <motion.div
+            transition={{
+              delay: 0.3,
+              duration: 0.8,
+              ease: 'easeInOut',
+            }}
+            animate={{ x: 100, opacity: 1.0 }}
+            className='h-40 w-40 rounded-full bg-slate-500 opacity-0'
+          />
+        </>
+      )}
     </div>
   )
 }
