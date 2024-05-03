@@ -24,33 +24,6 @@ const Home = () => {
     })
   }, [windowObj])
 
-  let lastScrollY = 0
-  var checkScrolling: any
-
-  const handleScroll = () => {
-    clearTimeout(checkScrolling)
-
-    const currentScrollY = window.scrollY
-
-    if (currentScrollY > lastScrollY || currentScrollY < lastScrollY) {
-      if (!isScrolling) setIsScrolling(true)
-    }
-
-    checkScrolling = setTimeout(() => {
-      if (isScrolling) setIsScrolling(false)
-    }, 66)
-
-    lastScrollY = currentScrollY
-  }
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
-
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setWindowObj(window)
@@ -59,7 +32,9 @@ const Home = () => {
 
   const handlePointClick = (pageNum: number) => {
     if (!windowObj) return
-    setCurrentPageNum(pageNum)
+    setTimeout(() => {
+      setCurrentPageNum(pageNum)
+    }, 500)
     windowObj.scrollTo({
       top: pageRefs.current[pageNum].offsetTop,
       behavior: 'smooth',
@@ -68,8 +43,8 @@ const Home = () => {
 
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
-      if (!windowObj || !pageRefs.current) return
-
+      if (!windowObj || !pageRefs.current || isScrolling) return
+      console.log(isScrolling)
       const maxPage = pageRefs.current.length - 1
       const minPage = 1
       const nextPage = Math.min(currentPageNum + 1, maxPage)
@@ -77,20 +52,30 @@ const Home = () => {
 
       if (event.deltaY > 0) {
         if (currentPageNum === nextPage) return
+        setIsScrolling(true)
         windowObj.scrollTo({
           top: pageRefs.current[nextPage].offsetTop,
           behavior: 'smooth',
         })
-        setCurrentPageNum(nextPage)
+
+        setTimeout(() => {
+          setCurrentPageNum(nextPage)
+          setIsScrolling(false)
+        }, 500)
         return
       }
       if (event.deltaY < 0) {
         if (currentPageNum === prevPage) return
+        setIsScrolling(true)
         windowObj.scrollTo({
           top: pageRefs.current[currentPageNum - 1].offsetTop,
           behavior: 'smooth',
         })
-        setCurrentPageNum(prevPage)
+        setTimeout(() => {
+          setCurrentPageNum(prevPage)
+          setIsScrolling(false)
+        }, 500)
+
         return
       }
     }
@@ -99,31 +84,29 @@ const Home = () => {
     return () => {
       windowObj?.removeEventListener('wheel', handleWheel)
     }
-  }, [windowObj, currentPageNum])
+  }, [windowObj, currentPageNum, isScrolling])
 
   return (
-    <>
-      <main className='relative '>
-        {pageObjArray.map((item, index) => {
-          return (
-            <Section
-              key={index}
-              pageNum={item.pageNum}
-              bgColor={item.bgColor}
-              pageRefs={pageRefs}
-              currentPageNum={currentPageNum}
-            />
-          )
-        })}
-        <div className='flex flex-col space-y-4 fixed top-1/2 -translate-y-1/2 right-10 z-10'>
-          <Buttons
-            pageObjArray={pageObjArray}
+    <main className='relative '>
+      {pageObjArray.map((item, index) => {
+        return (
+          <Section
+            key={index}
+            pageNum={item.pageNum}
+            bgColor={item.bgColor}
+            pageRefs={pageRefs}
             currentPageNum={currentPageNum}
-            handlePointClick={handlePointClick}
           />
-        </div>
-      </main>
-    </>
+        )
+      })}
+      <div className='flex flex-col space-y-4 fixed top-1/2 -translate-y-1/2 right-10 z-10'>
+        <Buttons
+          pageObjArray={pageObjArray}
+          currentPageNum={currentPageNum}
+          handlePointClick={handlePointClick}
+        />
+      </div>
+    </main>
   )
 }
 
