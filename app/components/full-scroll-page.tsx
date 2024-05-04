@@ -82,7 +82,7 @@ export const FullScrollPage = ({ children }: Props) => {
   }
 
   return (
-    <main className='relative'>
+    <main className='relative h-screen'>
       {childrenArray.map((child, index) => (
         <div
           key={index}
@@ -91,7 +91,7 @@ export const FullScrollPage = ({ children }: Props) => {
               pageRefs.current[index] = el
             }
           }}
-          className='h-screen w-full'
+          className='h-full w-full'
         >
           {cloneElement(child as any, {
             isCurrentPage: currentPageNum === index,
@@ -104,9 +104,7 @@ export const FullScrollPage = ({ children }: Props) => {
             key={index}
             onClick={() => handlePointClick(index)}
             className={`w-4 h-4 flex items-center justify-center rounded-full bg-gray-400 hover:bg-gray-400 transition-colors duration-200 ease-in-out ${
-              currentPageNum === index
-                ? 'bg-gray-800 text-white'
-                : 'text-gray-800'
+              currentPageNum === index && 'bg-gray-800 text-white'
             }`}
           ></button>
         ))}

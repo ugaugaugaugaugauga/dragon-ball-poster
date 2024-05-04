@@ -9,7 +9,7 @@ export const Page4 = ({ isCurrentPage }: any) => {
         <motion.div
           transition={{
             delay: 0.3,
-            duration: 0.8,
+            duration: 0.2,
             ease: 'easeInOut',
           }}
           animate={{ x: 100, opacity: 1.0 }}
