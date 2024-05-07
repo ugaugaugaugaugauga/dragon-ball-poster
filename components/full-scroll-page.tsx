@@ -1,6 +1,7 @@
 'use client'
 
-import React, { cloneElement } from 'react'
+import { cn } from '@/lib/utils'
+import React, { cloneElement, useCallback } from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 type Props = {
@@ -15,20 +16,8 @@ export const FullScrollPage = ({ children }: Props) => {
 
   const pageRefs = useRef<HTMLDivElement[]>([])
 
-  useEffect(() => {
-    windowObj?.scrollTo({
-      top: 0,
-    })
-  }, [windowObj])
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setWindowObj(window)
-    }
-  }, [])
-
-  useEffect(() => {
-    const handleWheel = (event: WheelEvent) => {
+  const handleWheel = useCallback(
+    (event: WheelEvent) => {
       if (!windowObj || !pageRefs.current || isScrolling) return
 
       const maxPage = pageRefs.current.length - 1
@@ -51,17 +40,53 @@ export const FullScrollPage = ({ children }: Props) => {
         setCurrentPageNum(nextPage)
         setIsScrolling(false)
       }, 500)
-    }
+    },
+    [windowObj, currentPageNum, isScrolling],
+  )
 
-    windowObj?.addEventListener('wheel', handleWheel)
+  const handlePointClick = useCallback(
+    (pageNum: number) => {
+      if (!windowObj) return
+      setTimeout(() => {
+        setCurrentPageNum(pageNum)
+      }, 500)
+      windowObj.scrollTo({
+        top: pageRefs.current[pageNum].offsetTop,
+        behavior: 'smooth',
+      })
+    },
+    [windowObj],
+  )
+
+  const handleResize = useCallback(() => {
+    if (!windowObj) return
+    windowObj.scrollTo({
+      top: pageRefs.current[currentPageNum].offsetTop,
+    })
+  }, [windowObj, currentPageNum])
+
+  useEffect(() => {
+    setWindowObj(window)
+  }, [])
+
+  useEffect(() => {
+    if (!windowObj) return
+    windowObj.scrollTo({
+      top: 0,
+    })
+  }, [windowObj])
+
+  useEffect(() => {
+    if (!windowObj) return
+
+    windowObj.addEventListener('wheel', handleWheel)
     return () => {
-      windowObj?.removeEventListener('wheel', handleWheel)
+      windowObj.removeEventListener('wheel', handleWheel)
     }
-  }, [windowObj, currentPageNum, isScrolling])
+  }, [windowObj, handleWheel])
 
   useEffect(() => {
     pageRefs.current = pageRefs.current.slice(0, childrenArray.length)
-
     childrenArray.forEach((_, index) => {
       const pageRef = pageRefs.current[index]
       if (pageRef && !pageRefs.current.includes(pageRef)) {
@@ -70,16 +95,13 @@ export const FullScrollPage = ({ children }: Props) => {
     })
   }, [childrenArray])
 
-  const handlePointClick = (pageNum: number) => {
+  useEffect(() => {
     if (!windowObj) return
-    setTimeout(() => {
-      setCurrentPageNum(pageNum)
-    }, 500)
-    windowObj.scrollTo({
-      top: pageRefs.current[pageNum].offsetTop,
-      behavior: 'smooth',
-    })
-  }
+    windowObj.addEventListener('resize', handleResize)
+    return () => {
+      windowObj.removeEventListener('resize', handleResize)
+    }
+  }, [handleResize])
 
   return (
     <main className='relative h-screen'>
@@ -98,16 +120,19 @@ export const FullScrollPage = ({ children }: Props) => {
           })}
         </div>
       ))}
-      <div className='flex flex-col space-y-4 fixed top-1/2 -translate-y-1/2 right-10 z-10'>
-        {childrenArray.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handlePointClick(index)}
-            className={`w-4 h-4 flex items-center justify-center rounded-full bg-gray-400 hover:bg-gray-400 transition-colors duration-200 ease-in-out ${
-              currentPageNum === index && 'bg-gray-800 text-white'
-            }`}
-          ></button>
-        ))}
+      <div className='flex flex-col space-y-4 fixed top-1/2 -translate-y-1/2 right-10 z-[9999]'>
+        {childrenArray.map((_, index) => {
+          return (
+            <button
+              key={index}
+              onClick={() => handlePointClick(index)}
+              className={cn(
+                'w-4 h-4 flex items-center justify-center rounded-full  transition-colors duration-200 ease-in-out bg-gray-200 hover:bg-gray-400',
+                currentPageNum === index && 'bg-sky-300 ',
+              )}
+            />
+          )
+        })}
       </div>
     </main>
   )

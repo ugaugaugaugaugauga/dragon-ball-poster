@@ -1,10 +1,17 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
-export const Page1 = ({ isCurrentPage }: any) => {
+export const CharacterInfoPage = ({ isCurrentPage }: any) => {
   return (
-    <div className='bg-green-300 h-full'>
+    <div className='relative h-full w-full'>
+      <Image
+        src={'/universe.jpg'}
+        alt={'universe'}
+        fill
+        className='object-cover object-center brightness-50'
+      />
       {isCurrentPage && (
         <motion.div
           transition={{
