@@ -3,11 +3,12 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import { SideNavigation } from './_components/side-navigation'
-import { Black_Han_Sans, Yeon_Sung } from 'next/font/google'
+import { Black_Han_Sans, Lobster, Yeon_Sung } from 'next/font/google'
 import { cn } from '@/lib/utils'
 
 const font = Black_Han_Sans({ weight: '400', subsets: ['latin'] })
 const font2 = Yeon_Sung({ weight: '400', subsets: ['latin'] })
+const lobster = Lobster({ weight: '400', subsets: ['latin'] })
 
 export enum CharacterType {
   S,
@@ -29,8 +30,10 @@ export const CharacterInfoPage = ({ isCurrentPage }: any) => {
 
   const vegeta = {
     name: '배지터',
+    icon: '/v.png',
     engName: 'vegeta',
     type: CharacterType.V,
+    onCharacterIconClick: () => setSelectedCharacter(CharacterType.V),
     selectedTransformType: selectedVegetaTransformType,
     characterInfo: [
       {
@@ -84,10 +87,31 @@ export const CharacterInfoPage = ({ isCurrentPage }: any) => {
       />
       {isCurrentPage && (
         <div className='relative h-full flex flex-col text-white'>
-          <SideNavigation
-            setType={setSelectedCharacter}
-            selectedCharacter={selectedCharacter}
-          />
+          <div className='pt-3 absolute top-0 left-0 flex flex-col'>
+            <h1
+              className={cn(
+                'flex justify-center text-white text-2xl uppercase mb-3',
+                lobster.className,
+              )}
+            >
+              characters
+            </h1>
+            <div
+              className={cn(
+                'z-30 bg-slate-700 h-16 w-32 border-2 border-black relative cursor-pointer brightness-50 hover:brightness-100 transition',
+                vegeta.type === selectedCharacter &&
+                  'brightness-100 border-yellow-500',
+              )}
+              onClick={vegeta.onCharacterIconClick}
+            >
+              <Image
+                src={vegeta.icon}
+                alt={vegeta.engName}
+                fill
+                className='object-cover'
+              />
+            </div>
+          </div>
           {selectedCharacter === CharacterType.V && (
             <section className='h-full xl:w-[1200px] w-full mx-auto flex justify-center'>
               <div className='relative w-[650px] h-full flex justify-center'>
