@@ -5,8 +5,8 @@ import { LandingPage } from './pages/landing/_page'
 const Home = () => {
   return (
     <FullScrollPage>
-      <CharacterInfoPage />
       <LandingPage />
+      <CharacterInfoPage />
     </FullScrollPage>
   )
 }

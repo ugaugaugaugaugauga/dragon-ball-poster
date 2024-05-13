@@ -19,14 +19,6 @@ export const CharacterSelectSideBar = ({
 }: Props) => {
   return (
     <>
-      <h1
-        className={cn(
-          'flex justify-center text-white text-2xl uppercase mb-3',
-          font,
-        )}
-      >
-        characters
-      </h1>
       <div
         className={cn(
           'z-30 bg-slate-700 h-16 w-32 border-2 border-black relative cursor-pointer brightness-50 hover:brightness-100 transition',
@@ -34,7 +26,13 @@ export const CharacterSelectSideBar = ({
         )}
         onClick={onIconClick}
       >
-        <Image src={iconSrc} alt={alt} fill className='object-cover' />
+        <Image
+          src={iconSrc}
+          alt={alt}
+          fill
+          sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+          className='object-cover'
+        />
       </div>
     </>
   )
