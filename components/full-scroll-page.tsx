@@ -120,15 +120,15 @@ export const FullScrollPage = ({ children }: Props) => {
           })}
         </div>
       ))}
-      <div className='flex flex-col space-y-4 fixed top-1/2 -translate-y-1/2 right-10 z-[9999]'>
+      <div className='flex flex-col space-y-4 fixed top-1/2 -translate-y-1/2 right-10 z-50'>
         {childrenArray.map((_, index) => {
           return (
             <button
               key={index}
               onClick={() => handlePointClick(index)}
               className={cn(
-                'w-4 h-4 flex items-center justify-center rounded-full  transition-colors duration-200 ease-in-out bg-gray-200 hover:bg-gray-400',
-                currentPageNum === index && 'bg-sky-300 ',
+                'w-4 h-4 flex items-center justify-center rounded-full  transition-colors duration-200 ease-in-out bg-gray-600 hover:bg-gray-200',
+                currentPageNum === index && 'bg-gray-200 ',
               )}
             />
           )
