@@ -22,6 +22,13 @@ const lobster = Lobster({ weight: '400', subsets: ['latin'] })
 export enum CharacterType {
   S,
   V,
+  SV,
+}
+
+enum GogetaTransformType {
+  NORMAL,
+  SAI,
+  BLUE,
 }
 
 enum VegetaTransformType {
@@ -38,12 +45,14 @@ enum SonGokuTransformType {
 
 export const CharacterInfoPage = ({ isCurrentPage }: any) => {
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterType>(
-    CharacterType.V,
+    CharacterType.SV,
   )
   const [selectedVegetaTransformType, setSelectedVegetaTransformType] =
     useState<VegetaTransformType>(VegetaTransformType.GOD)
   const [selectedSonGokuTransformType, setSelectedSonGokuTransformType] =
     useState<SonGokuTransformType>(SonGokuTransformType.SAI)
+  const [selectedGogetaTransformType, setSelectedGogetaTransformType] =
+    useState<GogetaTransformType>(GogetaTransformType.BLUE)
 
   const characters = [
     {
@@ -124,6 +133,46 @@ export const CharacterInfoPage = ({ isCurrentPage }: any) => {
           iconSrc: '/v-blue-icon.png',
           onIconClick: () =>
             setSelectedVegetaTransformType(VegetaTransformType.BLUE),
+        },
+      ],
+    },
+    {
+      name: '오지터',
+      icon: '/sv-normal-icon.png',
+      engName: 'Gogeta',
+      type: CharacterType.SV,
+      onCharacterIconClick: () => setSelectedCharacter(CharacterType.SV),
+      selectedTransformType: selectedGogetaTransformType,
+      characterInfo: [
+        {
+          transformType: GogetaTransformType.NORMAL,
+          transformName: '노말',
+          imgSrc: '/sv1.webp',
+          width: 550,
+          comment: '"흠, 난 오지터. 오공과 베지터가 합체한 거라고."',
+          iconSrc: '/sv-normal-icon.png',
+          onIconClick: () =>
+            setSelectedGogetaTransformType(GogetaTransformType.NORMAL),
+        },
+        {
+          transformType: GogetaTransformType.SAI,
+          transformName: '초사이어인',
+          imgSrc: '/sv2.webp',
+          width: 650,
+          comment: '"30분이나 필요 없어. 손가락 하나면 충분하다!"',
+          iconSrc: '/sv-sai-icon.png',
+          onIconClick: () =>
+            setSelectedGogetaTransformType(GogetaTransformType.SAI),
+        },
+        {
+          transformType: GogetaTransformType.BLUE,
+          transformName: '초사이어인 블루',
+          imgSrc: '/sv3.webp',
+          width: 550,
+          comment: '"자, 결판을 내자고."',
+          iconSrc: '/sv-blue-icon.png',
+          onIconClick: () =>
+            setSelectedGogetaTransformType(GogetaTransformType.BLUE),
         },
       ],
     },
