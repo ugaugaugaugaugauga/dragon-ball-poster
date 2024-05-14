@@ -8,7 +8,7 @@ export const SidebarTitle = ({ font }: Props) => {
   return (
     <h1
       className={cn(
-        'flex justify-center text-white text-2xl uppercase mb-3',
+        'flex justify-center text-white text-xl uppercase mb-3',
         font,
       )}
     >

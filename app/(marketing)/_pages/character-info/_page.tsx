@@ -1,9 +1,7 @@
 'use client'
 
-import Image from 'next/image'
 import { Fragment, useState } from 'react'
-import { Black_Han_Sans, Lobster, Yeon_Sung } from 'next/font/google'
-import { cn } from '@/lib/utils'
+import { Black_Han_Sans, Nanum_Myeongjo, Yeon_Sung } from 'next/font/google'
 import { Background } from './_components/background'
 import { CharacterSelectSideBar } from './_components/character-select-side-bar'
 import { CharacterName } from './_components/character-name'
@@ -14,10 +12,11 @@ import { CharacterComment } from './_components/character-comment'
 import { SidebarTitle } from './_components/sidebar-title'
 import React from 'react'
 import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 const blackHanSans = Black_Han_Sans({ weight: '400', subsets: ['latin'] })
 const yeonSung = Yeon_Sung({ weight: '400', subsets: ['latin'] })
-const lobster = Lobster({ weight: '400', subsets: ['latin'] })
+const NanumMyeongjo = Nanum_Myeongjo({ weight: '400', subsets: ['latin'] })
 
 export enum CharacterType {
   S,
@@ -147,8 +146,8 @@ export const CharacterInfoPage = ({ isCurrentPage }: any) => {
         {
           transformType: GogetaTransformType.NORMAL,
           transformName: '노말',
-          imgSrc: '/sv1.webp',
-          width: 550,
+          imgSrc: '/sv1.png',
+          width: 650,
           comment: '"흠, 난 오지터. 오공과 베지터가 합체한 거라고."',
           iconSrc: '/sv-normal-icon.png',
           onIconClick: () =>
@@ -189,7 +188,7 @@ export const CharacterInfoPage = ({ isCurrentPage }: any) => {
             transition={{ delay: 0, duration: 0.5 }}
             className='pt-3 absolute top-0 left-0 flex flex-col '
           >
-            <SidebarTitle font={lobster.className} />
+            <SidebarTitle font={NanumMyeongjo.className} />
             {characters.map((character) => (
               <CharacterSelectSideBar
                 key={character.name}
@@ -197,7 +196,7 @@ export const CharacterInfoPage = ({ isCurrentPage }: any) => {
                 alt={character.engName}
                 isSelected={character.type === selectedCharacter}
                 onIconClick={character.onCharacterIconClick}
-                font={lobster.className}
+                font={NanumMyeongjo.className}
               />
             ))}
           </motion.div>
@@ -265,6 +264,23 @@ export const CharacterInfoPage = ({ isCurrentPage }: any) => {
                       width={info.width}
                     />
                   ))}
+                  {/* <motion.div
+                    initial={{ opacity: 0, width: 30 }}
+                    animate={{ opacity: 1, width: 300 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                    className='absolute top-[600px] -left-40 w-[300px] h-[200px] bg-slate-700 rounded-md'
+                  >
+                    <h3 className='border-b border-white pb-1 bg-slate-800 p-3'>
+                      <motion.span
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: 300 }}
+                        transition={{ delay: 0.8, duration: 0.2 }}
+                        className={cn('text-xl', yeonSung.className)}
+                      >
+                        캐릭터 소개
+                      </motion.span>
+                    </h3>
+                  </motion.div> */}
 
                   <div className='absolute top-80 left-0 transform translate-x-[500px] flex flex-col'>
                     {character.characterInfo.map((info) => (
