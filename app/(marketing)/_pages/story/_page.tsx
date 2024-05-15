@@ -17,7 +17,7 @@ const stories = [
 ]
 
 export function StoryPage({ isCurrentPage }: any) {
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(2)
   const [delayIndex, setDelayIndex] = useState(currentIndex)
 
   const length = stories.length
