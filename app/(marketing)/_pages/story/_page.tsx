@@ -8,17 +8,18 @@ import { ArrowLeft, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 
+const stories = [
+  { imgSrc: '/story1.png', title: '브로리의 유배, 복수의 다짐' },
+  { imgSrc: '/story2.png', title: '복수의 시작, 파라가스의 야망' },
+  { imgSrc: '/story3.png', title: '분노의 브로리 사이언인의 위기' },
+  { imgSrc: '/story4.png', title: '파라가스의 죽음, 각성 브로리' },
+  { imgSrc: '/story5.png', title: '오지터의 등장, 싸움의 끝' },
+]
+
 export function StoryPage({ isCurrentPage }: any) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [delayIndex, setDelayIndex] = useState(currentIndex)
 
-  const stories = [
-    { imgSrc: '/story1.png', title: '브로리의 유배, 복수의 다짐' },
-    { imgSrc: '/story2.png', title: '복수의 시작, 파라가스의 야망' },
-    { imgSrc: '/story3.png', title: '분노의 브로리 사이언인의 위기' },
-    { imgSrc: '/story4.png', title: '파라가스의 죽음, 각성 브로리' },
-    { imgSrc: '/story5.png', title: '오지터의 등장, 싸움의 끝' },
-  ]
   const length = stories.length
   useEffect(() => {
     setTimeout(() => {
