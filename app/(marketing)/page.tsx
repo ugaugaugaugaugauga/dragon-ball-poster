@@ -6,9 +6,9 @@ import { StoryPage } from './_pages/story/_page'
 const Home = () => {
   return (
     <FullScrollPage>
-      <StoryPage />
       <LandingPage />
       <CharacterInfoPage />
+      <StoryPage />
     </FullScrollPage>
   )
 }
