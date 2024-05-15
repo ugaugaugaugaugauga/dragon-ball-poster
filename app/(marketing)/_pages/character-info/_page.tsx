@@ -168,7 +168,7 @@ export const CharacterInfoPage = ({ isCurrentPage }: any) => {
           transformName: '초사이어인 블루',
           imgSrc: '/sv3.webp',
           width: 550,
-          comment: '"자, 결판을 내자고."',
+          comment: '"자, 이제 결판을 내자고."',
           iconSrc: '/sv-blue-icon.png',
           onIconClick: () =>
             setSelectedGogetaTransformType(GogetaTransformType.BLUE),
